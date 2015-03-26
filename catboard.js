@@ -1,23 +1,26 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
-
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+  Template.catboard.helpers({
+    total_matching_cats: function() {
+      this.dep.depend();
+      return Cat.find(this.db_selector).count();
+    },
+    matching_cats: function() {
+      this.cat_selector.dep.depend();
+      return Cat.find(this.cat_selector.db_selector);
+    },
+    selected_value: function() {
+      this.dep.depend();
+      return this.selected;
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  Template.catboard.events({
+    'click button.filter-button': function(event, template) {
+      var target = $(event.target);
+      // 'this' inside event handlers is the data context of the template!  Hooray!
+      this.cat_selector.db_selector = target.data('filter-value');
+      this.cat_selector.selected = target.data('filter-title');
+      this.cat_selector.dep.changed();
     }
-  });
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
   });
 }

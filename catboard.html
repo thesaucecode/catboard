@@ -3,12 +3,21 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="catboard">
+  <button class="filter-button" data-filter-title='all' data-filter-value='{}'>All</button>
+  <button class="filter-button" data-filter-title='tabby' data-filter-value='{"breed": "Tabby"}'>Tabby</button>
+  <button class="filter-button" data-filter-title='tortoiseshell' data-filter-value='{"breed": "Tortoiseshell"}'>Tortiseshell</button>
+
+  {{#with cat_selector}}
+    <h1>Total of {{selected_value}} Cats: {{total_matching_cats}}</h1>
+  {{/with}}
+  <h3>Matching cats:</h3>
+  <ul>
+    {{#each matching_cats}}
+      <li>{{catName}} [{{breed}}]</li>
+    {{/each}}  
+  </ul>
+    
 </template>
